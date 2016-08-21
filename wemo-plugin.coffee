@@ -20,19 +20,22 @@ module.exports = (env) ->
 
       config = {
         class: 'WemoSwitch',
-        name: json.name,
-        host: deviceInfo.friendlyName
+        name: deviceInfo.friendlyName,
+        serialnumber: deviceInfo.serialNumber,
+        modelname: deviceInfo.modelName
       }
       
       @framework.deviceManager.discoveredDevice(
-                  'wemo', "Presence of '#{deviceInfo.friendlyName}'"
+                  'wemo', "Presence of '#{deviceInfo.friendlyName}'", config
                 )
       return
 
-    init: (app, @framework, @config) =>
+     
+
+    init: (app, @framework, config) =>
       env.logger.info("WEMO: Init")
 
-
+      
       
 
       deviceConfigDef = require("./device-config-schema")
@@ -53,6 +56,10 @@ module.exports = (env) ->
         )
 
   class WemoSwitch extends env.devices.PowerSwitch
+    constructor: (@config) ->
+      @name = @config.name
+      @id = @config.id
+      super()
 
     # ...@framework.deviceManager.on('discover', (eventData) =>
 

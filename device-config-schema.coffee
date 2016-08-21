@@ -1,13 +1,18 @@
 # #Shell device configuration options
 module.exports = {
-  title: "pimatic-ouimeaux device config schemas"
+  title: "wemo-plugin device config schemas"
   WemoSwitch: {
     title: "WemoSwitch config options"
     type: "object"
     extensions: ["xConfirm", "xLink", "xOnLabel", "xOffLabel"]
     properties:
       serialnumber:
-        description: ""
+        description: "Device serial number"
+        type: "string"
+        options:
+          hidden: yes
+      modelname:
+        description: "Model"
         type: "string"
         options:
           hidden: yes
