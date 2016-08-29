@@ -62,6 +62,19 @@ module.exports = (env) ->
       env.logger.info("WEMO: Device created!: "+@config.host+":"+@config.port)
       super()
 
+    getState: () ->
+      env.logger.info("WEMO: getState!")
+      wemoclient = new wemoClient()
+      wemoclient.load 'http://'+@config.host+':'+@config.port+'/setup.xml', (deviceInfo) ->
+        env.logger.info("WEMO: Load")
+        client = wemoclient.client(deviceInfo)
+        _state = client.getBinaryState
+        env.logger.info("WEMO: Done!")
+        @_state = _state
+        return
+
+
+
     # ...@framework.deviceManager.on('discover', (eventData) =>
 
   # ###Finally
