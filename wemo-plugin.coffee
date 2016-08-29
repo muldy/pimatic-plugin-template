@@ -15,14 +15,14 @@ module.exports = (env) ->
 
     callMe: (deviceInfo) =>
       env.logger.info('Wemo: Device Found: %j', deviceInfo.friendlyName)
-      str = '{ "name": "John Doe", "age": 42 }'
-      json = JSON.parse(str)
 
       config = {
         class: 'WemoSwitch',
         name: deviceInfo.friendlyName,
         serialnumber: deviceInfo.serialNumber,
-        modelname: deviceInfo.modelName
+        modelname: deviceInfo.modelName,
+        host: deviceInfo.host,
+        port: deviceInfo.port
       }
       
       @framework.deviceManager.discoveredDevice(
@@ -59,6 +59,7 @@ module.exports = (env) ->
     constructor: (@config) ->
       @name = @config.name
       @id = @config.id
+      env.logger.info("WEMO: Device created!: "+@config.host+":"+@config.port)
       super()
 
     # ...@framework.deviceManager.on('discover', (eventData) =>

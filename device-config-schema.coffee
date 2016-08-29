@@ -16,5 +16,16 @@ module.exports = {
         type: "string"
         options:
           hidden: yes
+      host:
+        description: "Host"
+        type: "string"
+        options:
+          hidden: yes
+      port:
+        description: "Port"
+        type: "number"
+        default: 5000
+        options:
+          hidden: yes
     }
 }
