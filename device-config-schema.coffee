@@ -1,6 +1,6 @@
 # #Shell device configuration options
 module.exports = {
-  title: "wemo-plugin device config schemas"
+  title: "wemo device config schemas"
   WemoSwitch: {
     title: "WemoSwitch config options"
     type: "object"

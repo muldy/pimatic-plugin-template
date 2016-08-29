@@ -1,9 +1,9 @@
-{ "name": "pimatic-plugin-wemo",
-  "description": "Wemo Pimatic plugin description",
+{ "name": "pimatic-wemo",
+  "description": "Wemo Pimatic",
   "author": "Muldy <muldy@github.com> (https://github.com/muldy)",
-  "main": "wemo-plugin",
+  "main": "wemo",
   "files": [
-    "wemo-plugin.coffee",
+    "wemo.coffee",
     "README.md",
     "wemo-config-schema.coffee"
   ],
