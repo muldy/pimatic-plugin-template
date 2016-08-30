@@ -73,6 +73,16 @@ module.exports = (env) ->
         @_state = _state
         return
 
+    changeStateTo: (state) ->
+      assert state is on or state is off
+      _state = state
+      wemoclient = new wemoClient()
+      wemoclient.load 'http://'+@config.host+':'+@config.port+'/setup.xml', (deviceInfo) ->
+        env.logger.info("WEMO: Load: "+state)
+        client = wemoclient.client(deviceInfo)
+        client.setBinaryState(state)
+        env.logger.info("WEMO: Done!"+_state)
+
 
 
     # ...@framework.deviceManager.on('discover', (eventData) =>
