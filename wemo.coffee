@@ -6,12 +6,12 @@ module.exports = (env) ->
   Promise = env.require 'bluebird'
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
-
   wemoClient = require("wemo-client")
+  Promise.promisify(wemoClient)
 
   # Create a class that extends the Plugin class and implements the following functions:
   class Wemo extends env.plugins.Plugin
-    wemoclient = new wemoClient()
+    @wemoclient = new wemoClient()
 
     callMe: (deviceInfo) =>
       env.logger.info('Wemo: Device Found: %j', deviceInfo.friendlyName)
@@ -35,9 +35,6 @@ module.exports = (env) ->
     init: (app, @framework, config) =>
       env.logger.info("WEMO: Init")
 
-      
-      
-
       deviceConfigDef = require("./device-config-schema")
 
       @framework.deviceManager.registerDeviceClass("WemoSwitch", {
@@ -45,14 +42,12 @@ module.exports = (env) ->
         createCallback: (config) => new WemoSwitch(config)
       })
 
-
-
       @framework.deviceManager.on('discover', (eventData) =>
         @framework.deviceManager.discoverMessage(
             'wemo', "Scanning for wemo devices..."
           )
 
-        wemoclient.discover (@callMe)
+        @wemoclient.discoverAsync().then(@callMe)
         )
 
   class WemoSwitch extends env.devices.PowerSwitch
@@ -63,25 +58,33 @@ module.exports = (env) ->
       super()
 
     getState: () ->
-      env.logger.info("WEMO: getState!")
       wemoclient = new wemoClient()
       wemoclient.load 'http://'+@config.host+':'+@config.port+'/setup.xml', (deviceInfo) ->
-        env.logger.info("WEMO: Load")
         client = wemoclient.client(deviceInfo)
         _state = client.getBinaryState
-        env.logger.info("WEMO: Done!")
         @_state = _state
         return
 
     changeStateTo: (state) ->
-      assert state is on or state is off
-      _state = state
+      if @_state is state then return Promise.resolve true
+      @_switchWemoSwitch(@config, state).then( =>
+              @_setState(state)
+              )
+
+    _switchWemoSwitch: (config, state) ->
       wemoclient = new wemoClient()
       wemoclient.load 'http://'+@config.host+':'+@config.port+'/setup.xml', (deviceInfo) ->
-        env.logger.info("WEMO: Load: "+state)
         client = wemoclient.client(deviceInfo)
-        client.setBinaryState(state)
-        env.logger.info("WEMO: Done!"+_state)
+        p = 0
+        if state
+          p = 1
+        client.setBinaryState(p)
+        env.logger.info("WEMO: "+p)
+      Promise.resolve true
+
+    destroy: ->
+            super()
+
 
 
 
