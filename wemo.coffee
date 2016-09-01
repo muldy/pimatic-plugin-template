@@ -33,8 +33,6 @@ module.exports = (env) ->
      
 
     init: (app, @framework, config) =>
-      env.logger.info("WEMO: Init")
-
       deviceConfigDef = require("./device-config-schema")
 
       @framework.deviceManager.registerDeviceClass("WemoSwitch", {
