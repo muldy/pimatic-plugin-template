@@ -1,5 +1,5 @@
 { "name": "pimatic-wemo",
-  "description": "Wemo Pimatic",
+  "description": "A Wemo Device control plugin",
   "author": "Muldy <muldy@github.com> (https://github.com/muldy)",
   "main": "wemo",
   "files": [
