@@ -10,3 +10,4 @@ Using [wemo-client](https://github.com/timonreinhard/wemo-client).
 
 ### Not implemented
 * Only switches work 
+* If device changes ip/port must be re-added[WIP]
