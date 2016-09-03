@@ -11,7 +11,6 @@ module.exports = (env) ->
 
   # Create a class that extends the Plugin class and implements the following functions:
   class Wemo extends env.plugins.Plugin
-    @wemoclient = new wemoClient()
 
     callMe: (deviceInfo) =>
       env.logger.info('Wemo: Device Found: %j', deviceInfo.friendlyName)
@@ -45,7 +44,8 @@ module.exports = (env) ->
             'wemo', "Scanning for wemo devices..."
           )
 
-        @wemoclient.discoverAsync().then(@callMe)
+        wemoclient = new wemoClient()
+        wemoclient.discoverAsync().then(@callMe)
         )
 
   class WemoSwitch extends env.devices.PowerSwitch
@@ -53,6 +53,7 @@ module.exports = (env) ->
       @name = @config.name
       @id = @config.id
       env.logger.info("WEMO: Device created!: "+@config.host+":"+@config.port)
+      @getState()
       super()
 
     getState: () ->
