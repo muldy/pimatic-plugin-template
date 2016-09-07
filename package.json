@@ -7,7 +7,7 @@
     "README.md",
     "wemo-config-schema.coffee"
   ],
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/muldy/pimatic-plugin-wemo",
   "private": true,
   "repository": {

@@ -7,27 +7,10 @@ module.exports = (env) ->
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
   wemoClient = require("wemo-client")
-  Promise.promisify(wemoClient)
 
   # Create a class that extends the Plugin class and implements the following functions:
   class Wemo extends env.plugins.Plugin
 
-    callMe: (deviceInfo) =>
-      env.logger.info('Wemo: Device Found: %j', deviceInfo.friendlyName)
-
-      config = {
-        class: 'WemoSwitch',
-        name: deviceInfo.friendlyName,
-        serialnumber: deviceInfo.serialNumber,
-        modelname: deviceInfo.modelName,
-        host: deviceInfo.host,
-        port: deviceInfo.port
-      }
-      
-      @framework.deviceManager.discoveredDevice(
-                  'wemo', "Presence of '#{deviceInfo.friendlyName}'", config
-                )
-      return
 
      
 
@@ -45,7 +28,22 @@ module.exports = (env) ->
           )
 
         wemoclient = new wemoClient()
-        wemoclient.discoverAsync().then(@callMe)
+        wemoclient.discover (deviceInfo) =>
+            env.logger.info('Wemo: Device Found: %j', deviceInfo.friendlyName)
+
+            config = {
+                class: 'WemoSwitch',
+                name: deviceInfo.friendlyName,
+                serialnumber: deviceInfo.serialNumber,
+                modelname: deviceInfo.modelName,
+                host: deviceInfo.host,
+                port: deviceInfo.port
+            }
+            
+            @framework.deviceManager.discoveredDevice(
+                        'wemo', "Presence of '#{deviceInfo.friendlyName}'", config
+                        )
+            return
         )
 
   class WemoSwitch extends env.devices.PowerSwitch
