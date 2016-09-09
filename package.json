@@ -5,7 +5,8 @@
   "files": [
     "wemo.coffee",
     "README.md",
-    "wemo-config-schema.coffee"
+    "wemo-config-schema.coffee",
+    "device-config-schema.coffee"
   ],
   "version": "0.0.2",
   "homepage": "https://github.com/muldy/pimatic-plugin-wemo",
