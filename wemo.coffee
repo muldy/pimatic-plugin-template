@@ -12,13 +12,13 @@ module.exports = (env) ->
   class Wemo extends env.plugins.Plugin
 
 
-     
+
 
     init: (app, @framework, config) =>
       deviceConfigDef = require("./device-config-schema")
 
       @framework.deviceManager.registerDeviceClass("WemoSwitch", {
-        configDef: deviceConfigDef.WemoSwitch, 
+        configDef: deviceConfigDef.WemoSwitch,
         createCallback: (config) => new WemoSwitch(config)
       })
 
@@ -39,7 +39,7 @@ module.exports = (env) ->
                 host: deviceInfo.host,
                 port: deviceInfo.port
             }
-            
+
             @framework.deviceManager.discoveredDevice(
                         'wemo', "Presence of '#{deviceInfo.friendlyName}'", config
                         )
@@ -55,12 +55,16 @@ module.exports = (env) ->
       super()
 
     getState: () ->
-      wemoclient = new wemoClient()
-      wemoclient.load 'http://'+@config.host+':'+@config.port+'/setup.xml', (deviceInfo) ->
-        client = wemoclient.client(deviceInfo)
-        _state = client.getBinaryState
-        @_state = _state
-        return
+      try
+        wemoclient = new wemoClient()
+        wemoclient.load 'http://'+@config.host+':'+@config.port+'/setup.xml', (deviceInfo) ->
+          client = wemoclient.client(deviceInfo)
+          _state = client.getBinaryState
+          @_state = _state
+          Promise.resolve true
+      catch err
+          env.logger.error "Unable to get power state of device: " + err.toString()
+
 
     changeStateTo: (state) ->
       if @_state is state then return Promise.resolve true

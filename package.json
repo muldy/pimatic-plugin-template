@@ -8,7 +8,7 @@
     "wemo-config-schema.coffee",
     "device-config-schema.coffee"
   ],
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/muldy/pimatic-plugin-wemo",
   "private": false,
   "repository": {
